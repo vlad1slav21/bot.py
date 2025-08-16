@@ -41,15 +41,15 @@ PRODUCTS = {
 }
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = context.user_id
+    user_id = update.effective_user.id
     user_states[user_id] = STEP_START
     keyboard = [['Купить']]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     await context.bot.send_message(chat_id=user_id, text="Здравствуйте! Выберите желаемый товар:", reply_markup=reply_markup)
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = context.user_id
-    text = context.update.message.text
+    user_id = update.effective_user.id
+    text = update.message.text
     username = update.effective_user.username or update.effective_user.full_name
     state = user_states.get(user_id, STEP_START)
 
@@ -121,11 +121,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await context.bot.send_message(chat_id=user_id, text=f'Пожалуйста, выберите район из списка для города {city} или отправьте /start чтобы начать заново.')
 
     except Exception as e:
-        # Ловим любую ошибку и подсказываем пользователю
         await context.bot.send_message(chat_id=user_id, text='Произошла ошибка. Отправьте /start чтобы начать заново.')
 
 def main():
-    TOKEN = '8430561215:AAGRoJjk72yTNwUjmTmPR0vtqJB4IfAtchA'  
+    TOKEN = '8430561215:AAGZguAy5yQkchLCSzNfTIDimrS9Cq4ufmQ'
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
