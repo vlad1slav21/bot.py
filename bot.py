@@ -1,6 +1,10 @@
+import os
 from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
-import os
+from dotenv import load_dotenv
+
+# Загружаем .env (для локальной разработки)
+load_dotenv()
 
 # Состояния пользователя
 STEP_START = 0
@@ -10,7 +14,7 @@ STEP_CITY = 3
 STEP_DISTRICT = 4
 
 # Админ Telegram ID
-ADMIN_ID = 7861733044  
+ADMIN_ID = 7861733044
 
 # Хранение состояний и выборов пользователей
 user_states = {}
@@ -33,14 +37,15 @@ CITIES = {
 
 # Продукты и цены
 PRODUCTS = {
-    "Мхуана": {"0.5г": "639₽", "1г": "1099₽", "5г": "4499₽"},  
-    "Меон": {"0.5г": "879₽", "1г": "1499₽", "5г": "6699₽"},  
-    "Мефон": {"0.5г": "569₽", "1г": "1099₽", "5г": "4199₽"},  
-    "Геин": {"0.5г": "799₽", "1г": "1299₽", "5г": "4999₽"},  
-    "Шаль": {"0.5г": "439₽", "1г": "799₽", "5г": "3699₽"}, 
-    "Кабис": {"0.5г": "599₽", "1г": "999₽", "5г": "4689₽"}  
+    "Мхуана": {"0.5г": "639₽", "1г": "1099₽", "5г": "4499₽"},
+    "Меон": {"0.5г": "879₽", "1г": "1499₽", "5г": "6699₽"},
+    "Мефон": {"0.5г": "569₽", "1г": "1099₽", "5г": "4199₽"},
+    "Геин": {"0.5г": "799₽", "1г": "1299₽", "5г": "4999₽"},
+    "Шаль": {"0.5г": "439₽", "1г": "799₽", "5г": "3699₽"},
+    "Кабис": {"0.5г": "599₽", "1г": "999₽", "5г": "4689₽"}
 }
 
+# Функция старт
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_states[user_id] = STEP_START
@@ -48,6 +53,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     await update.message.reply_text("Здравствуйте! Выберите желаемый товар:", reply_markup=reply_markup)
 
+# Обработчик сообщений
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     text = update.message.text
@@ -122,6 +128,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text('Произошла ошибка. Отправьте /start чтобы начать заново.')
 
+# Основная функция запуска
 def main():
     TOKEN = os.getenv("TOKEN")
     if not TOKEN:
@@ -133,5 +140,5 @@ def main():
     print("Бот запущен...")
     app.run_polling()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
