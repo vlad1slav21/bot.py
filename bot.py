@@ -135,7 +135,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def main():
-    TOKEN = 'ВАШ_ТОКЕН_ЗДЕСЬ'
+    TOKEN = '8430561215:AAGRoJjk72yTNwUjmTmPR0vtqJB4IfAtchA'
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
