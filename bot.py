@@ -1,5 +1,6 @@
 from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+import os
 
 # Состояния пользователя
 STEP_START = 0
@@ -124,7 +125,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=user_id, text='Произошла ошибка. Отправьте /start чтобы начать заново.')
 
 def main():
-    TOKEN = '8430561215:AAGZguAy5yQkchLCSzNfTIDimrS9Cq4ufmQ'
+    TOKEN = os.getenv("TOKEN")  # можно положить токен в .env
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
