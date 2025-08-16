@@ -125,12 +125,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=user_id, text='Произошла ошибка. Отправьте /start чтобы начать заново.')
 
 def main():
-    TOKEN = os.getenv("TOKEN")  # можно положить токен в .env
+    TOKEN = os.getenv("TOKEN")
+    if not TOKEN:
+        raise ValueError("Не найден токен! Установите переменную окружения TOKEN.")
+    
     app = ApplicationBuilder().token(TOKEN).build()
-
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
-
     print("Бот запущен...")
     app.run_polling()
 
